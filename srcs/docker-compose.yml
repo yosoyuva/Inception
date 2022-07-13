@@ -1,17 +1,51 @@
 version: '3'
-
 services:
 
+
   mysql:
-    image: mariadb
-
+    build: ./requirements/mariadb
+    image: mariadb:inception
+    container_name: mariadb
     volumes:
-      - /data/mysql:/var/lib/mysql
-
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${USER_NAME}
-      MYSQL_PASSWORD: ${USER_PASS}
-
+      - /home/abuj/work/42/Inception/mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    networks:
+      - default
     restart: always
+
+
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress:inception
+    container_name: wordpress
+    volumes:
+      - /home/abuj/work/42/Inception/website:/var/www/html
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    networks:
+      - default
+    ports:
+      - "9000:9000"
+    restart: always
+
+
+  nginx:
+    build: ./requirements/nginx
+    image: nginx:inception
+    container_name: nginx
+    volumes:
+      - /home/abuj/work/42/Inception/nginx:/etc/nginx/conf.d
+      - /home/abuj/work/42/Inception/website:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - default
+
+  networks:
+    default:
+        driver: bridge
