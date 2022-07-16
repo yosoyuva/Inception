@@ -10,7 +10,7 @@ server {
 
         root /var/www/html;
 
-        index index.html index.htm index.deb.html index.php;
+        index index.html index.htm index.nginx-debian.html index.php;
 
         location ~ \.php$ {
           #fastcgi_pass wordpress:9000;
