@@ -1,17 +1,12 @@
 FROM debian:buster
 
-RUN apt-get update -y && apt-get upgrade -y
-RUN apt install nginx openssl vim -y
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=x`75/L=Paris/O=42/CN=ymehdi' -keyout /etc/ssl/certs/ymehdi.42paris.key -out /etc/ssl/certs/ymehdi.42paris.crt
+LABEL maintainer="ymehdi <ymehdi@student.42.fr>"
 
-RUN chmod 777 /var/www/html
-RUN apt-get clean
-
+RUN apt-get update -y && apt-get upgrade -y && apt install nginx openssl vim -y
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=FR/ST=75/L=Paris/O=42/CN=ymehdi" -keyout /etc/ssl/certs/ymehdi.42paris.key -out /etc/ssl/certs/ymehdi.42paris.crt
+RUN chmod 755 /var/www/html
 
 COPY ./conf/default /etc/nginx/sites-available/default
+COPY ./conf/index.deb.html /var/www/html/index.deb.html
 
-#COPY ./tools/rights.sh .
-#CMD ["sh", "rights.sh"]
-COPY ./tools/index.deb.html /var/www/html/index.deb.html
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

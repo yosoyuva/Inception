@@ -2,27 +2,27 @@ version: '3'
 networks:
   inception-networks:
     driver: bridge
-    name: inception-yuva
+    name: inception-ymehdi
 
 volumes:
   mariadb_db:
     driver: local
     driver_opts:
       type: volume
-      device: /home/pthink/data/mariadb
+      device: ~/data/mariadb
       o: bind
 
   wordpress_vol:
     driver: local
     driver_opts:
       type: volume
-      device: /home/pthink/data/wp
+      device: ~/data/wp
       o: bind
 
 services:
   wordpress:
     build: ./requirements/wordpress/
-    image : wordpress:yuva
+    image : wordpress:ymehdi
     container_name: wordpress
     restart: always
     depends_on:
@@ -36,7 +36,7 @@ services:
 
   mariadb:
     build: ./requirements/mariadb/
-    image : mariadb:yuva
+    image : mariadb:ymehdi
     container_name: mariadb
     restart: always
     env_file:
@@ -48,7 +48,7 @@ services:
 
   nginx:
     build: ./requirements/nginx/
-    image: nginx:yuva
+    image: nginx:ymehdi
     container_name: nginx
     ports:
       - 443:443
